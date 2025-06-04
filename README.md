@@ -1,4 +1,3 @@
-
 # Ansible Security Project 🔐
 
 Este proyecto automatiza el despliegue de una infraestructura de red segura usando Ansible y VMware ESXi. Incluye firewalls, servidores en VLANs, y un honeypot Cowrie listo para pruebas de ciberseguridad.
@@ -59,7 +58,19 @@ cd ansible_security_project
 ```bash
 ansible-playbook -i inventory.yml deploy_all.yml
 ```
+### Uso de variables de entorno
 
+Para evitar exponer credenciales sensibles en el repositorio, puedes usar un archivo `vars_example.yml` como plantilla. Crea un archivo `vars.yml` basado en el siguiente formato:
+
+```bash
+cp vars_example.yml vars.yml
+```
+
+Edita `vars.yml` y reemplaza los valores con tus credenciales y configuraciones reales. Asegúrate de **NO subir `vars.yml` al repositorio** agregándolo a tu archivo `.gitignore`:
+
+```bash
+echo "vars.yml" >> .gitignore
+```
 ## 🧪 Verificación
 
 - Puedes verificar el honeypot accediendo por SSH al puerto 2222 de la IP configurada para Cowrie.
