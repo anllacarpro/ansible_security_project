@@ -1,0 +1,15 @@
+---
+- name: Desplegar Firewall 1
+  import_playbook: playbook_fw1.yml
+
+- name: Desplegar Firewall 2
+  import_playbook: playbook_fw2.yml
+
+- name: Desplegar servidor DNS (con seed ISO)
+  import_playbook: playbook_dns.yml
+
+- name: Desplegar servidor Web (con seed ISO)
+  import_playbook: playbook_web.yml
+
+- name: Desplegar honeypot Cowrie (con seed ISO)
+  import_playbook: playbook_cowrie.yml

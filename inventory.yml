@@ -1,0 +1,22 @@
+all:
+  children:
+    pfsense:
+      hosts:
+        pf1:
+          ansible_host: 192.168.40.1
+          ansible_user: admin
+          ansible_password: your_pfsense_password
+    servers:
+      hosts:
+        dns:
+          ansible_host: 192.168.10.10
+          ansible_user: ubuntu
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+        web:
+          ansible_host: 192.168.20.10
+          ansible_user: ubuntu
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+        cowrie:
+          ansible_host: 192.168.30.10
+          ansible_user: ubuntu
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa

@@ -1,0 +1,19 @@
+- name: Configurar servidor DNS
+  hosts: dns
+  become: true
+  tasks:
+    - name: Instalar bind9
+      apt:
+        name: bind9
+        state: present
+        update_cache: true
+
+    - name: Copiar archivo de configuración
+      copy:
+        src: named.conf.options
+        dest: /etc/bind/named.conf.options
+
+    - name: Reiniciar bind9
+      service:
+        name: bind9
+        state: restarted

@@ -1,0 +1,40 @@
+- name: Desplegar servidor Web en VLAN 20
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  collections:
+    - community.vmware
+
+  tasks:
+    - name: Crear VM Web
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        port: "{{ vcenter_port }}"
+        validate_certs: "{{ validate_certs }}"
+        datacenter: "{{ datacenter }}"
+        folder: "{{ folder }}"
+        name: "srv-web"
+        guest_id: "ubuntu64Guest"
+        state: poweredon
+        disk:
+          - size_gb: 15
+            type: thin
+            datastore: "{{ datastore }}"
+        hardware:
+          memory_mb: 2048
+          num_cpus: 2
+        cdrom:
+          - type: iso
+            iso_path: "{{ iso_path }}"
+            controller_number: 0
+            unit_number: 0
+          - type: iso
+            iso_path: "[{{ datastore }}] seed-web.iso"  # Seed ISO para cloud-init
+            controller_number: 0
+            unit_number: 1  
+        networks:
+          - name: "{{ network_vlan20 }}"
+        wait_for_ip_address: false

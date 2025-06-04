@@ -1,0 +1,91 @@
+- name: Instalación y configuración completa de Cowrie honeypot
+  hosts: cowrie
+  become: true
+
+  vars:
+    cowrie_dir: /opt/cowrie
+    fs_pickle: "{{ cowrie_dir }}/src/cowrie/data/fs.pickle"
+
+  tasks:
+    - name: Instalar dependencias base
+      apt:
+        name:
+          - git
+          - python3
+          - python3-venv
+          - openssh-server
+          - libssl-dev
+          - libffi-dev
+          - build-essential
+        state: present
+        update_cache: yes
+
+    - name: Reiniciar el servicio SSH
+      systemd:
+        name: ssh
+        state: restarted
+        enabled: true
+
+    - name: Redirigir puerto 22 al 2222 con iptables
+      command: >
+        iptables -t nat -A PREROUTING -p tcp --dport 22 -j REDIRECT --to-port 2222
+      ignore_errors: true
+
+    - name: Clonar repositorio Cowrie
+      git:
+        repo: https://github.com/cowrie/cowrie.git
+        dest: "{{ cowrie_dir }}"
+        version: master
+        force: yes
+        update: yes
+
+    - name: Crear entorno virtual Python
+      command: python3 -m venv {{ cowrie_dir }}/cowrie-env
+      args:
+        creates: "{{ cowrie_dir }}/cowrie-env"
+
+    - name: Instalar requerimientos con pip
+      shell: |
+        source {{ cowrie_dir }}/cowrie-env/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+      args:
+        chdir: "{{ cowrie_dir }}"
+        executable: /bin/bash
+
+    - name: Copiar y personalizar configuración cowrie.cfg
+      copy:
+        src: "{{ cowrie_dir }}/etc/cowrie.cfg.dist"
+        dest: "{{ cowrie_dir }}/etc/cowrie.cfg"
+        remote_src: true
+
+    - name: Crear sistema de archivos falso (fs.pickle)
+      shell: |
+        source {{ cowrie_dir }}/cowrie-env/bin/activate
+        ./bin/createfs -l / -o src/cowrie/data/fs.pickle
+      args:
+        chdir: "{{ cowrie_dir }}"
+        executable: /bin/bash
+
+    - name: Crear archivo userdb.txt
+      copy:
+        src: "{{ cowrie_dir }}/etc/userdb.example"
+        dest: "{{ cowrie_dir }}/etc/userdb.txt"
+        remote_src: true
+
+    - name: Iniciar Cowrie
+      shell: |
+        source {{ cowrie_dir }}/cowrie-env/bin/activate
+        ./bin/cowrie start
+      args:
+        chdir: "{{ cowrie_dir }}"
+        executable: /bin/bash
+
+    - name: Verificar que Cowrie esté corriendo en el puerto 2222
+      shell: ss -tulnp | grep 2222
+      register: port_check
+      changed_when: false
+
+    - name: Mostrar estado del puerto 2222
+      debug:
+        var: port_check.stdout

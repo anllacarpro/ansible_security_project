@@ -1,0 +1,20 @@
+- name: Configurar servidor web
+  hosts: web
+  become: true
+  tasks:
+    - name: Instalar Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: true
+
+    - name: Crear página de prueba
+      copy:
+        dest: /var/www/html/index.html
+        content: "<h1>Servidor Web Desplegado con Ansible</h1>"
+
+    - name: Asegurar que apache2 esté activo
+      service:
+        name: apache2
+        state: started
+        enabled: true

@@ -1,0 +1,23 @@
+#cloud-config
+autoinstall:
+  version: 1
+  identity:
+    hostname: honeypot-cowrie
+    username: ubuntu
+    password: "$6$P4JG1zVTKE3x9dcR$YSIyjk3LneUEPrcJoR6b1RDmkNPF5dItLDxMMMZPgbrG5lu9tGHNA1K9JUt7HJZX3vVU2VUdzFvy.89y0rUcq."
+  ssh:
+    install-server: true
+    authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDu2uKtZz7o51jJugYsuf/oIkRynlNpBievAK5tUTV3q440peTCmy7NE/Al/iI+Hnj7hxSYVGY3HfOju+EKjNVW8rkgiWERVx0rvZkCwyxG7++sG+dHbPwgFeilkZIWWFGedGsEYJPnzUucRc5ory9B9G/Ki5GPkTEjneDfDT0dOab4FXfMjBjfaIE/ORmqYFAQ7QFYwbDHpLHH6x2DQnRM0luXj+XlmJfWuAr1YmdJdSOXgjBYVdmftxryX3nzCJS8kaxjXD0NzSow+PlBt95AuLD2hOd+XgBtBEeLcbITjulR0XMNyCHspTkGCXHpqjg8J9tx8qRBKGtIdPi0VaWjz+gMqc84kYUrqXOZL4gDrHUysfLL7Cb6l0f4bHZO3yy8LGFpDqYmQbO/x0f/sVRKMtrgkAelkgQtBbGU0U4ZGy5xTabSkSOgXoy3HOiLKtObB45xkUGOjXNZg3FwrmcCZnNbsxSVbQL5Fi54B3Nkk5hxjxnraoD3MaiGtRSGQRU= usuario@DESKTOP-BL79PGO
+  network:
+    version: 2
+    ethernets:
+      ens160:
+        dhcp4: false
+        addresses: [192.168.30.10/24]
+        gateway4: 192.168.30.1
+        nameservers:
+          addresses: [8.8.8.8, 1.1.1.1]
+  storage:
+    layout:
+      name: direct

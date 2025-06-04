@@ -1,0 +1,36 @@
+- name: Deploy pfSense Firewall 2 (Redundante)
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  collections:
+    - community.vmware
+
+  tasks:
+    - name: Crear VM Firewall 2
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        port: "{{ vcenter_port }}"
+        validate_certs: "{{ validate_certs }}"
+        datacenter: "{{ datacenter }}"
+        folder: "{{ folder }}"
+        name: "fw2-pfsense"
+        guest_id: "freebsd64Guest"
+        state: poweredon
+        disk:
+          - size_gb: 10
+            type: thin
+            datastore: "{{ datastore }}"
+        hardware:
+          memory_mb: 2048
+          num_cpus: 2
+        cdrom:
+          - type: iso
+            iso_path: "{{ pfsense_iso_path }}"
+            controller_number: 0
+            unit_number: 0
+        networks:
+          - name: "{{ network_trunk }}"
+        wait_for_ip_address: false

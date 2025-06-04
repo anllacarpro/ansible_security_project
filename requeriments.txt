@@ -1,0 +1,17 @@
+ansible-core==2.18.6
+certifi==2025.4.26
+cffi==1.17.1
+charset-normalizer==3.4.2
+cryptography==45.0.3
+idna==3.10
+Jinja2==3.1.6
+lxml==5.4.0
+MarkupSafe==3.0.2
+packaging==25.0
+pycparser==2.22
+pyvmomi==8.0.3.0.1
+PyYAML==6.0.2
+requests==2.32.3
+resolvelib==1.0.1
+six==1.17.0
+urllib3==2.4.0
