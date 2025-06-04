@@ -1,0 +1,35 @@
+# vars_example.yml
+
+# Conexión a ESXi / vCenter (rellenar con tus credenciales reales)
+vcenter_hostname: "your-vcenter-host-or-ip"
+vcenter_port: 443
+username: "your-username"
+password: "your-password"
+validate_certs: false
+
+# Infraestructura VMware
+datacenter: "ha-datacenter"
+datastore: "datastore1"
+folder: "/ha-datacenter/vm"
+
+# ISOs
+iso_path: "[datastore1] ubuntu-24.04.2-live-server-amd64.iso"
+pfsense_iso_path: "[datastore1] pfSense-CE-2.7.0-RELEASE-amd64.iso"
+
+# Redes configuradas en vSwitch
+network_vlan10: "puertos_vlan10"         # VLAN 10 – Compras
+network_vlan20: "puertos_vlan20"         # VLAN 20 – Ventas
+network_vlan30: "puertos_vlan30"         # VLAN 30 – Marketing
+network_trunk: "trunk"                   # Trunk (VLAN 4095)
+network_general: "VM Network"            # Red general
+network_management: "Management Network" # Red de gestión ESXi
+
+# Configuración de red
+netmask: "255.255.255.0"
+
+# Gateways por VLAN
+gateway_vlan10: "192.168.10.1"
+gateway_vlan20: "192.168.20.1"
+gateway_vlan30: "192.168.30.1"
+gateway_trunk: "192.168.40.1"
+gateway_dmz: "192.168.99.1"
